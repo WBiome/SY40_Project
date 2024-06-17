@@ -30,3 +30,5 @@ Execute `./server` in one of them and `./client` in the two others.
 You will now be able to follow the instruction in the clients terminals to use the program.
 
 You can do that with more than 2 clients, but they are always linked one by one so you need an even number of clients.
+
+<span style="color:red">Attention : Le nombre de client est défini directement dans le code par une constante MAX_CLIENTS est n'est modifiable que dans le code</span>

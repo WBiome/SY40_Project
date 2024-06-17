@@ -6,7 +6,10 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 
-#define MAX_CLIENTS 4
+
+// Attention, MAX_CLIENTS attends un nombre pair
+#define MAX_CLIENTS 4   // Nombre pair uniquement
+
 #define BUFFER_SIZE 1024
 #define PORT 8080
 
@@ -46,7 +49,7 @@ void *client_handler(void *arg) {
     int client_num = *(int *)arg;
     int sockfd = clients[client_num].sockfd;
     int other_client = clients[client_num].other_client_id;
-    int pair_id = client_num / 2; // Each pair has a unique id
+    int pair_id = client_num / 2;
     free(arg);
     char buffer[BUFFER_SIZE];
 
@@ -60,7 +63,6 @@ void *client_handler(void *arg) {
             break;
         }
 
-        // Signal au client d'écrire
         send(sockfd, "WRITE", 5, 0);
 
         // Réception du message du client
@@ -90,7 +92,7 @@ int main() {
     for (int i = 0; i < MAX_CLIENTS / 2; ++i) {
         pthread_mutex_init(&pairs[i].mutex, NULL);
         pthread_cond_init(&pairs[i].cond, NULL);
-        pairs[i].active_client = 2 * i; // Initial active client is the first in each pair
+        pairs[i].active_client = 2 * i;
     }
 
     int server_fd, new_socket;
