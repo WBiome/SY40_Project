@@ -19,16 +19,16 @@ void *receive_handler(void *arg) {
             break;
         }
         if (strcmp(buffer, "WRITE") == 0) {
-            // If received signal to write
-            printf("Enter your message: ");
+            // Si le signal "WRITE" est reçu
+            printf("Entrez votre message: ");
             fflush(stdout);
             memset(buffer, 0, BUFFER_SIZE);
             fgets(buffer, BUFFER_SIZE, stdin);
             send(sockfd, buffer, strlen(buffer), 0);
         } else {
-            // Message from the other client
-            printf("Message received: %s", buffer);
-            printf("Waiting for your turn...\n");
+            // Message de l'autre client
+            printf("Message reçu: %s", buffer);
+            printf("En attente de votre tour...\n");
         }
     }
     
@@ -42,7 +42,7 @@ int main() {
     pthread_t recv_thread;
 
     if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
-        printf("\n Socket creation error \n");
+        printf("\nErreur de création de socket \n");
         return -1;
     }
 
@@ -50,12 +50,12 @@ int main() {
     serv_addr.sin_port = htons(PORT);
 
     if (inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr) <= 0) {
-        printf("\nInvalid address/ Address not supported \n");
+        printf("\nAdresse invalide / Adresse non supportée \n");
         return -1;
     }
 
     if (connect(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
-        printf("\nConnection Failed \n");
+        printf("\nÉchec de la connexion \n");
         return -1;
     }
 

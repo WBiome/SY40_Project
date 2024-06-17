@@ -24,7 +24,4 @@ client.o: client.c
 clean:
 	rm -f *.o $(TARGETS)
 
-# Arrêter les processus client et serveur
-kill:
-	-pkill -f client
-	-pkill -f server
+
