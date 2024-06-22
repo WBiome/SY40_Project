@@ -13,17 +13,23 @@ void *receive_handler(void *arg) {
     char buffer[BUFFER_SIZE];
     
     while (1) {
+        // initialisation du buffer avant la reception
         memset(buffer, 0, BUFFER_SIZE);
+        // reception du message
         int bytes_received = recv(sockfd, buffer, BUFFER_SIZE, 0);
         if (bytes_received <= 0) {
+            perror("Erreur de réception du message");
             break;
         }
         if (strcmp(buffer, "WRITE") == 0) {
             // Si le signal "WRITE" est reçu
             printf("Entrez votre message: ");
             fflush(stdout);
-            memset(buffer, 0, BUFFER_SIZE);
+            // initialisation du buffer avant l'envoi
+            memset(buffer, 0, BUFFER_SIZE); 
+            // lecture du message
             fgets(buffer, BUFFER_SIZE, stdin);
+            // envoi du message
             send(sockfd, buffer, strlen(buffer), 0);
         } else {
             // Message de l'autre client
@@ -39,7 +45,7 @@ int main() {
     int sockfd;
     struct sockaddr_in serv_addr;
     char buffer[BUFFER_SIZE];
-    pthread_t recv_thread;
+    pthread_t receive_thread;
 
     if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
         printf("\nErreur de création de socket \n");
@@ -59,10 +65,9 @@ int main() {
         return -1;
     }
 
-    pthread_create(&recv_thread, NULL, receive_handler, &sockfd);
-
-    pthread_join(recv_thread, NULL);
-
+    pthread_create(&receive_thread, NULL, receive_handler, &sockfd);
+    pthread_join(receive_thread, NULL);
     close(sockfd);
+
     return 0;
 }
