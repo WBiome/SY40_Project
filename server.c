@@ -5,6 +5,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <arpa/inet.h>
+#include <sys/socket.h>
 
 // MAX_CLIENTS attend un nombre pair
 #define MAX_CLIENTS 4  
@@ -44,7 +45,7 @@ void sigusr2_handler(int sig) {
     printf("Nombre de clients connectés: %d\n", num_clients);
 }
 
-void signal() {
+void signal_handler() {
     struct sigaction sa1, sa2;
     sa1.sa_handler = sigusr1_handler;
     sa2.sa_handler = sigusr2_handler;
@@ -99,7 +100,7 @@ void *client_handler(void *arg) {
 
 int main() {
     // Installation des handlers pour SIGUSR1 et SIGUSR2
-    signal();
+    signal_handler();
 
     // Initialisation des mutex et des variables de condition pour chaque paire de clients
     for (int i = 0; i < MAX_CLIENTS / 2; ++i) {
